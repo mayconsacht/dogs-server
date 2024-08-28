@@ -1,15 +1,12 @@
-import { Photo, photos } from '../models/photoModel';
+import { db } from '../config/database';
+import { Photo } from '../models/photoModel';
 
-export const getAllPhotos = (): Photo[] => {
-  return photos;
-};
+export async function findPhoto(criteria: Partial<Photo>) {
+  let query = db.selectFrom('photo');
 
-export const getPhotoById = (id: number): Photo | undefined => {
-  return photos.find((photo) => photo.id === id);
-};
+  if (criteria.id) {
+    query = query.where('id', '=', criteria.id);
+  }
 
-export const createPhoto = (photo: Photo): Photo => {
-  photo.id = photos.length + 1;
-  photos.push(photo);
-  return photo;
-};
+  return await query.selectAll().execute();
+}
