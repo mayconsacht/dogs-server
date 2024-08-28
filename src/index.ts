@@ -1,6 +1,6 @@
 import app from './app';
 import 'reflect-metadata';
-import { AppDataSource } from './dataSource';
+import { AppDataSource } from './config/dataSource';
 
 AppDataSource.initialize()
   .then(async () => {
