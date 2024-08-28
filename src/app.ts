@@ -1,7 +1,8 @@
 import express, { Application } from 'express';
-import userRoutes from './routes/photoRoutes';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config();
 
@@ -16,6 +17,12 @@ app.use(
   express.json()
 );
 
-app.use('/api', userRoutes);
+const routesPath = path.join(__dirname, 'routes');
+
+fs.readdirSync(routesPath).forEach((file) => {
+  const route = require(path.join(routesPath, file)).default;
+
+  app.use('/api', route);
+});
 
 export default app;
