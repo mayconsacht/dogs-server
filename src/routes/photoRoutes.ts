@@ -3,6 +3,6 @@ import * as photoController from '../controllers/photoController';
 
 const router = Router();
 
-router.get('/photos/:id', photoController.getPhotoById);
+router.get('/api/photo', photoController.getPhotoById);
 
 export default router;
