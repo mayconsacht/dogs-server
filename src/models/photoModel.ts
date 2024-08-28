@@ -6,7 +6,7 @@ export interface PhotoTable {
   title: string;
   date: Date;
   src: string;
-  weight: string;
+  weight: Number;
   age: Number;
   totalAccess: Number;
   totalComments: Number;
