@@ -1,6 +1,9 @@
 import express, { Application } from 'express';
 import userRoutes from './routes/photoRoutes';
 import cors from 'cors';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const app: Application = express();
 

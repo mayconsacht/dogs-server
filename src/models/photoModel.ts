@@ -2,6 +2,7 @@ import { Generated, Selectable } from 'kysely';
 
 export interface PhotoTable {
   id: Generated<number>;
+  userId: string;
   author: string;
   title: string;
   date: Date;

@@ -3,6 +3,13 @@ import { Database } from '../models/types';
 
 export async function up(db: Kysely<Database>): Promise<void> {
   await db.schema
+    .createTable('user')
+    .addColumn('id', 'serial', (col) => col.primaryKey())
+    .addColumn('user', 'varchar', (col) => col.notNull())
+    .addColumn('password', 'varchar', (col) => col.notNull())
+    .execute();
+
+  await db.schema
     .createTable('photo')
     .addColumn('id', 'serial', (col) => col.primaryKey())
     .addColumn('title', 'varchar', (col) => col.notNull())
