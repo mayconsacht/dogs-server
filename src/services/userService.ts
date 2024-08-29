@@ -1,11 +1,11 @@
 import { db } from '../config/database';
 import { User } from '../models/userModel';
 
-export const create = async (user: string, password: string) => {
+export const create = async (username: string, password: string) => {
   let result = await db
     .insertInto('user')
     .values({
-      user,
+      username,
       password,
     })
     .executeTakeFirst();
@@ -26,6 +26,7 @@ export const findUserBy = async (criteria: Partial<User>) => {
 export const findUser = async (username: string) => {
   return (await db
     .selectFrom('user')
-    .where('user', '=', username)
+    .selectAll()
+    .where('username', '=', username)
     .executeTakeFirst()) as User;
 };

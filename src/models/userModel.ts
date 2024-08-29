@@ -2,7 +2,7 @@ import { Generated, Insertable, Selectable } from 'kysely';
 
 export interface UserTable {
   id: Generated<number>;
-  user: string;
+  username: string;
   password: string;
 }
 

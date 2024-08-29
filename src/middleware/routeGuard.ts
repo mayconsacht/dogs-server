@@ -20,6 +20,7 @@ export const authenticateToken = async (
 
   jwt.verify(token, `${process.env.JWT_SECRET}`, (err: any, user: any) => {
     if (err) return res.sendStatus(403);
+    console.log('guard: ' + user);
     req.user = user;
     next();
   });

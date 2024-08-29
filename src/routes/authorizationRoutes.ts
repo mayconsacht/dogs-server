@@ -3,6 +3,7 @@ import * as authorizationController from '../controllers/authorizationController
 
 const router = Router();
 
-router.get('/validate', authorizationController.validateToken);
+router.post('/validate', authorizationController.validateToken);
+router.post('/', authorizationController.login);
 
 export default router;

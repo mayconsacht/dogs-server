@@ -4,8 +4,8 @@ import { authenticateToken } from '../middleware/routeGuard';
 
 const router = Router();
 
-router.get('/:id', photoController.getPhotoById);
+router.get('/:id', authenticateToken, photoController.getPhotoById);
 router.get('/', photoController.getPhotos);
-router.post('/', photoController.create);
+router.post('/', authenticateToken, photoController.create);
 
 export default router;
