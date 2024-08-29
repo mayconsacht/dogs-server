@@ -19,8 +19,7 @@ export const validateToken = (
   }
 
   try {
-    const decoded = jwt.verify(token, `${process.env.JWT_SECRET}`);
-    req.user = decoded;
+    jwt.verify(token, `${process.env.JWT_SECRET}`);
     next();
   } catch (error) {
     return res.status(401).json({ message: 'Invalid or expired token' });

@@ -12,10 +12,10 @@ const app: Application = express();
 
 app.use(
   cors({
-    origin: 'https://dogs.mayconsacht.com',
+    origin: process.env.CLIENT_URL,
     methods: 'GET, POST, PUT, DELETE, OPTIONS',
     allowedHeaders: 'Authorization, Content-Type',
-    credentials: true,
+    credentials: false,
     preflightContinue: false,
     optionsSuccessStatus: 204,
   })
