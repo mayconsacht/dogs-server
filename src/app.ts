@@ -15,8 +15,8 @@ app.use(
     origin: process.env.CLIENT_URL,
     methods: 'GET, POST, PUT, DELETE, OPTIONS',
     allowedHeaders: 'Authorization, Content-Type',
-    credentials: false,
-    preflightContinue: false,
+    credentials: true,
+    preflightContinue: true,
     optionsSuccessStatus: 204,
   })
 );
