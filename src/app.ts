@@ -12,10 +12,20 @@ const app: Application = express();
 app.use(
   cors({
     origin: 'https://dogs.mayconsacht.com',
-    methods: 'GET, POST, PUT, DELETE',
+    methods: 'GET, POST, PUT, DELETE, OPTIONS',
     allowedHeaders: 'Authorization, Content-Type',
+    credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   })
 );
+
+app.use((req, res, next) => {
+  console.log(
+    `Request Method: ${req.method}, Request URL: ${req.url}, Origin: ${req.headers.origin}`
+  );
+  next();
+});
 
 app.use(express.json());
 
