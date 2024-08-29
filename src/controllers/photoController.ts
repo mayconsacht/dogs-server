@@ -12,14 +12,14 @@ export const getPhotoById = (req: Request, res: Response): void => {
 };
 
 export const getPhotos = async (req: Request, res: Response): Promise<void> => {
-  const page = parseInt(req.query.page as string, 10) || 1;
-  const total = parseInt(req.query.total as string, 10) || 10;
+  const page = parseInt(req.query.page as string, 6) || 1;
+  const total = parseInt(req.query.total as string, 6) || 6;
   const user = req.query.user as string;
 
-  const photo = photoService.findPhotos({ userId: user }, page, total);
+  const photos = await photoService.findPhotos({ userId: user }, page, total);
 
-  if (photo) {
-    res.status(200).json(photo);
+  if (photos) {
+    res.status(200).json(photos);
   } else {
     res.status(404).json({ message: 'Photo not found' });
   }
