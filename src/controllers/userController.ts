@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import * as userService from '../services/userService';
+import bcrypt from 'bcryptjs';
 
-export const getUser = (req: Request, res: Response): void => {
-  const photo = userService.findUserBy({ id: Number(req.params.id) });
+export const getUser = async (req: Request, res: Response): Promise<void> => {
+  const photo = await userService.findUserBy({ id: Number(req.params.id) });
   if (photo) {
     res.status(200).json(photo);
   } else {
@@ -10,7 +11,14 @@ export const getUser = (req: Request, res: Response): void => {
   }
 };
 
-export const createUser = (req: Request, res: Response): void => {
+export const createUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { username, password } = req.body;
-  userService.create(username, password);
+  const userId = await userService.create(
+    username,
+    await bcrypt.hash(password, 10)
+  );
+  res.status(201).json(userId);
 };

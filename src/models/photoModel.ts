@@ -1,4 +1,4 @@
-import { Generated, Selectable } from 'kysely';
+import { Generated, Insertable, Selectable } from 'kysely';
 
 export interface PhotoTable {
   id: Generated<number>;
@@ -14,3 +14,4 @@ export interface PhotoTable {
 }
 
 export type Photo = Selectable<PhotoTable>;
+export type NewPhoto = Insertable<PhotoTable>;

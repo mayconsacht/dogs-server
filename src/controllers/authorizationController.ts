@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-export const authenticateToken = async (
+export const validateToken = (
   req: Request,
   res: Response,
-  next: Function
+  next: NextFunction
 ) => {
   const authHeader = req.headers.authorization;
 
@@ -18,9 +18,11 @@ export const authenticateToken = async (
     return res.status(401).json({ message: 'Token missing' });
   }
 
-  jwt.verify(token, `${process.env.JWT_SECRET}`, (err: any, user: any) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
+  try {
+    const decoded = jwt.verify(token, `${process.env.JWT_SECRET}`);
+    req.user = decoded;
     next();
-  });
+  } catch (error) {
+    return res.status(401).json({ message: 'Invalid or expired token' });
+  }
 };

@@ -6,5 +6,6 @@ const router = Router();
 
 router.get('/:id', photoController.getPhotoById);
 router.get('/', photoController.getPhotos);
+router.post('/', photoController.create);
 
 export default router;
