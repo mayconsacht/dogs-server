@@ -1,27 +1,25 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import * as userService from '../services/userService';
 import bcrypt from 'bcryptjs';
 
-export const validateToken = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const validateToken = (req: Request, res: Response) => {
   const authHeader = req.headers.authorization;
-
   if (!authHeader) {
     return res.status(401).json({ message: 'Authorization header missing' });
   }
 
   const token = authHeader.split(' ')[1];
-
   if (!token) {
     return res.status(401).json({ message: 'Token missing' });
   }
 
   try {
-    jwt.verify(token, `${process.env.JWT_SECRET}`);
+    jwt.verify(token, `${process.env.JWT_SECRET}`, (err: any, user: any) => {
+      if (err) return res.sendStatus(403);
+      req.user = user;
+      return res.sendStatus(204);
+    });
   } catch (error) {
     return res.status(401).json({ message: 'Invalid or expired token' });
   }

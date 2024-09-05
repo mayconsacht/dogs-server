@@ -2,15 +2,15 @@ import { Generated, Insertable, Selectable } from 'kysely';
 
 export interface PhotoTable {
   id: Generated<number>;
-  userId: string;
+  userId: number;
   author: string;
   title: string;
   date: Date;
-  src: string;
-  weight: Number;
-  age: Number;
-  totalAccess: Number;
-  totalComments: Number;
+  img: string;
+  weight: number;
+  age: number;
+  totalHits: number;
+  totalComments: number;
 }
 
 export type Photo = Selectable<PhotoTable>;

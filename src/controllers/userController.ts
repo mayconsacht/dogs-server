@@ -3,10 +3,9 @@ import * as userService from '../services/userService';
 import bcrypt from 'bcryptjs';
 
 export const getUser = async (req: Request, res: Response) => {
-  const user = userService.findUserBy({ id: req.user?.id });
+  const user = await userService.findUserBy({ id: req.user?.id });
   if (user) {
-    console.log('user ' + JSON.stringify(user));
-    res.status(200).json(user);
+    res.status(200).json(user[0]);
   } else {
     res.status(404).json({ message: 'User not found' });
   }

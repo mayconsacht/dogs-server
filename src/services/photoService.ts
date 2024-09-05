@@ -27,21 +27,22 @@ export const findPhotos = async (
   return await query.offset(offset).limit(total).execute();
 };
 
-export const create = async (user: NewPhoto) => {
+export const create = async (photo: NewPhoto) => {
   let result = await db
     .insertInto('photo')
     .values({
-      userId: user.userId,
-      author: user.author,
-      title: user.title,
-      date: user.date,
-      src: user.src,
-      weight: user.weight,
-      age: user.age,
-      totalAccess: user.totalAccess,
-      totalComments: user.totalComments,
+      userId: photo.userId,
+      author: photo.author,
+      title: photo.title,
+      date: photo.date,
+      img: photo.img,
+      weight: photo.weight,
+      age: photo.age,
+      totalHits: photo.totalHits,
+      totalComments: photo.totalComments,
     })
-    .executeTakeFirst();
+    .returning('id')
+    .executeTakeFirstOrThrow();
 
-  return await result.insertId;
+  return result.id;
 };

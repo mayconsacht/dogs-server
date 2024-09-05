@@ -12,15 +12,16 @@ export async function up(db: Kysely<Database>): Promise<void> {
   await db.schema
     .createTable('photo')
     .addColumn('id', 'serial', (col) => col.primaryKey())
+    .addColumn('userId', 'integer', (col) => col.notNull())
     .addColumn('title', 'varchar', (col) => col.notNull())
     .addColumn('author', 'varchar', (col) => col.notNull())
     .addColumn('date', 'timestamp', (col) =>
       col.defaultTo(sql`now()`).notNull()
     )
-    .addColumn('src', 'varchar', (col) => col.notNull())
+    .addColumn('img', 'varchar', (col) => col.notNull())
     .addColumn('weight', 'integer')
     .addColumn('age', 'integer')
-    .addColumn('totalAccess', 'integer')
+    .addColumn('totalHits', 'integer')
     .addColumn('totalComments', 'integer')
     .execute();
 }

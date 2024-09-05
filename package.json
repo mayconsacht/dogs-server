@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production ts-node src/index.ts",
-    "dev": "NODE_ENV=development ts-node src/index.ts",
+    "start": "NODE_ENV=production ts-node --files src/index.ts",
+    "dev": "NODE_ENV=development ts-node --files src/index.ts",
     "build": "tsc",
     "migrate": "ts-node src/scripts/migrator.ts"
   },
@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@vercel/blob": "^0.23.4",
     "@vercel/postgres-kysely": "^0.9.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
@@ -20,6 +21,7 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "kysely": "^0.27.4",
+    "multer": "^1.4.5-lts.1",
     "pg": "^8.12.0",
     "reflect-metadata": "^0.2.2",
     "swagger-jsdoc": "^6.2.8",
@@ -31,6 +33,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
+    "@types/multer": "^1.4.12",
     "@types/node": "^22.5.1",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
