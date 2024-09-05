@@ -1,15 +1,30 @@
 import { db } from '../config/database';
 import { NewPhoto, Photo } from '../models/photoModel';
+import { deleteComments } from './commentService';
 
-export const findPhoto = async (criteria: Partial<Photo>) => {
-  let query = db.selectFrom('photo');
-
-  if (criteria.id) {
-    query = query.where('id', '=', criteria.id);
-  }
-
-  return await query.selectAll().execute();
+export const findPhoto = async (id: number) => {
+  const photo = (
+    await db
+      .selectFrom('photo')
+      .where('id', '=', id)
+      .selectAll()
+      .limit(1)
+      .execute()
+  )[0];
+  return await updateHitsCount(photo);
 };
+
+async function updateHitsCount(photo: Photo) {
+  const photoUpdated = await db
+    .updateTable('photo')
+    .set({
+      totalHits: photo.totalHits++,
+    })
+    .where('id', '=', photo.id)
+    .returningAll()
+    .execute();
+  return photoUpdated;
+}
 
 export const findPhotos = async (
   criteria: Partial<Photo>,
@@ -39,10 +54,22 @@ export const create = async (photo: NewPhoto) => {
       weight: photo.weight,
       age: photo.age,
       totalHits: photo.totalHits,
-      totalComments: photo.totalComments,
     })
     .returning('id')
     .executeTakeFirstOrThrow();
 
   return result.id;
+};
+
+export const deletePhoto = async (id: number) => {
+  let result = await db
+    .deleteFrom('photo')
+    .where('id', '=', id)
+    .executeTakeFirst();
+
+  if (result.numDeletedRows) {
+    await deleteComments(id);
+  }
+
+  return result.numDeletedRows;
 };

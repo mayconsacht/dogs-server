@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as photoController from '../controllers/photoController';
+import * as commentController from '../controllers/commentController';
 import { authenticateToken } from '../middleware/routeGuard';
 import multer from 'multer';
 import express from 'express';
@@ -13,10 +14,9 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}_${file.originalname}`);
   },
 });
-
 const upload = multer({ storage });
 
-router.get('/:id', authenticateToken, photoController.getPhotoById);
+router.get('/:id', photoController.getPhotoById);
 router.get('/', photoController.getPhotos);
 router.post('/', authenticateToken, upload.any(), photoController.create);
 router.post(
@@ -26,5 +26,7 @@ router.post(
   upload.any(),
   photoController.uploadPhoto
 );
+router.post('/:id/comment', authenticateToken, commentController.create);
+router.delete('/:id', authenticateToken, photoController.deletePhoto);
 
 export default router;

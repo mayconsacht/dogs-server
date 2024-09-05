@@ -22,10 +22,19 @@ export async function up(db: Kysely<Database>): Promise<void> {
     .addColumn('weight', 'integer')
     .addColumn('age', 'integer')
     .addColumn('totalHits', 'integer')
-    .addColumn('totalComments', 'integer')
+    .execute();
+
+  await db.schema
+    .createTable('comment')
+    .addColumn('id', 'serial', (col) => col.primaryKey())
+    .addColumn('photoId', 'integer', (col) => col.notNull())
+    .addColumn('author', 'varchar', (col) => col.notNull())
+    .addColumn('content', 'varchar', (col) => col.notNull())
     .execute();
 }
 
 export async function down(db: Kysely<Database>): Promise<void> {
   await db.schema.dropTable('photo').execute();
+  await db.schema.dropTable('user').execute();
+  await db.schema.dropTable('comment').execute();
 }

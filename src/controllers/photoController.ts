@@ -2,11 +2,15 @@ import { put } from '@vercel/blob';
 import { Request, Response } from 'express';
 import { NewPhoto } from '../models/photoModel';
 import * as photoService from '../services/photoService';
+import * as commentService from '../services/commentService';
+import { UsingJoinColumnIsNotAllowedError } from 'typeorm';
 
-export const getPhotoById = (req: Request, res: Response) => {
-  const photo = photoService.findPhoto({ id: Number(req.params.id) });
+export const getPhotoById = async (req: Request, res: Response) => {
+  let photo = await photoService.findPhoto(Number(req.params.id));
+  const comments = await commentService.findCommentsByPhoto(photo[0].id);
+
   if (photo) {
-    res.status(200).json(photo);
+    res.status(200).json({ photo: photo[0], comments });
   } else {
     res.status(404).json({ message: 'Photo not found' });
   }
@@ -31,7 +35,7 @@ export const getPhotos = async (req: Request, res: Response) => {
 };
 
 export const create = async (req: Request, res: Response) => {
-  const inserts = await photoService.create({
+  const photoId = await photoService.create({
     userId: req.user?.id,
     author: req.user?.username,
     title: req.body.name,
@@ -40,8 +44,8 @@ export const create = async (req: Request, res: Response) => {
     age: req.body.age,
   } as NewPhoto);
 
-  if (inserts && inserts > 0) {
-    res.status(200).json(inserts);
+  if (photoId) {
+    res.status(200).json(photoId);
   } else {
     res.status(404).json({ message: 'Photo not found' });
   }
@@ -53,4 +57,13 @@ export const uploadPhoto = async (req: Request, res: Response) => {
     access: 'public',
   });
   return res.json(blob.url);
+};
+
+export const deletePhoto = async (req: Request, res: Response) => {
+  const numDeletedRow = await photoService.deletePhoto(Number(req.params.id));
+  if (numDeletedRow) {
+    res.status(200).json({ message: 'Photo deleted successfully' });
+  } else {
+    res.status(404).json({ message: 'Photo not found' });
+  }
 };

@@ -10,7 +10,6 @@ export interface PhotoTable {
   weight: number;
   age: number;
   totalHits: number;
-  totalComments: number;
 }
 
 export type Photo = Selectable<PhotoTable>;
