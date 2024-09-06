@@ -14,32 +14,34 @@ export const findPhoto = async (id: number) => {
   return await updateHitsCount(photo);
 };
 
-async function updateHitsCount(photo: Photo) {
+export const updateHitsCount = async (photo: Photo) => {
   const photoUpdated = await db
     .updateTable('photo')
     .set({
-      totalHits: photo.totalHits++,
+      totalHits: ++photo.totalHits,
     })
     .where('id', '=', photo.id)
     .returningAll()
     .execute();
   return photoUpdated;
-}
+};
 
 export const findPhotos = async (
   criteria: Partial<Photo>,
   page: number,
   total: number
 ) => {
-  const offset = (page - 1) * total;
-
-  const query = db.selectFrom('photo').selectAll();
-
-  if (criteria.userId != null) {
-    query.where('userId', '=', criteria.userId);
+  let query = db.selectFrom('photo');
+  if (criteria.userId && criteria.userId != 0) {
+    query = query.where('userId', '=', Number(criteria.userId));
+  } else if (criteria.author) {
+    query = query.where('author', '=', criteria.author);
   }
-
-  return await query.offset(offset).limit(total).execute();
+  if (page > 0 && total > 0) {
+    const offset = (page - 1) * total;
+    query = query.offset(offset).limit(total);
+  }
+  return await query.selectAll().execute();
 };
 
 export const create = async (photo: NewPhoto) => {

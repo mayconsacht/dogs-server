@@ -21,7 +21,7 @@ export async function up(db: Kysely<Database>): Promise<void> {
     .addColumn('img', 'varchar', (col) => col.notNull())
     .addColumn('weight', 'integer')
     .addColumn('age', 'integer')
-    .addColumn('totalHits', 'integer')
+    .addColumn('totalHits', 'integer', (col) => col.defaultTo(0))
     .execute();
 
   await db.schema

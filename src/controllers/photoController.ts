@@ -1,9 +1,8 @@
 import { put } from '@vercel/blob';
 import { Request, Response } from 'express';
-import { NewPhoto } from '../models/photoModel';
+import { NewPhoto, Photo } from '../models/photoModel';
 import * as photoService from '../services/photoService';
 import * as commentService from '../services/commentService';
-import { UsingJoinColumnIsNotAllowedError } from 'typeorm';
 
 export const getPhotoById = async (req: Request, res: Response) => {
   let photo = await photoService.findPhoto(Number(req.params.id));
@@ -16,17 +15,16 @@ export const getPhotoById = async (req: Request, res: Response) => {
   }
 };
 
+const isNumber = (value: any) => {
+  return /^-?\d+(\.\d+)?$/.test(value);
+};
+
 export const getPhotos = async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string, 6) || 1;
   const total = parseInt(req.query.total as string, 6) || 6;
   const user = req.query.user as string;
-
-  const photos = await photoService.findPhotos(
-    { userId: Number(user) },
-    page,
-    total
-  );
-
+  let filter = isNumber(user) ? { userId: Number(user) } : { author: user };
+  const photos = await photoService.findPhotos(filter, page, total);
   if (photos) {
     res.status(200).json(photos);
   } else {
@@ -35,17 +33,18 @@ export const getPhotos = async (req: Request, res: Response) => {
 };
 
 export const create = async (req: Request, res: Response) => {
-  const photoId = await photoService.create({
+  const photo = {
     userId: req.user?.id,
     author: req.user?.username,
     title: req.body.name,
     img: req.body.img,
     weight: req.body.weight,
     age: req.body.age,
-  } as NewPhoto);
+  } as NewPhoto;
+  const photoId = await photoService.create(photo);
 
   if (photoId) {
-    res.status(200).json(photoId);
+    res.status(200).json(photo);
   } else {
     res.status(404).json({ message: 'Photo not found' });
   }
@@ -66,4 +65,26 @@ export const deletePhoto = async (req: Request, res: Response) => {
   } else {
     res.status(404).json({ message: 'Photo not found' });
   }
+};
+
+export const getStats = async (req: Request, res: Response) => {
+  const photos = await photoService.findPhotos(
+    { userId: Number(req.user?.id) },
+    0,
+    0
+  );
+  if (photos) {
+    const stats = mapToStats(photos);
+    res.status(200).json(stats);
+  } else {
+    res.status(404).json({ message: 'Photo not found' });
+  }
+};
+
+export const mapToStats = (photos: Photo[]) => {
+  return photos.map((photo) => ({
+    id: photo.id,
+    title: photo.title,
+    hits: photo.totalHits,
+  }));
 };

@@ -16,9 +16,12 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+router.get('/stats', authenticateToken, photoController.getStats);
 router.get('/:id', photoController.getPhotoById);
 router.get('/', photoController.getPhotos);
+router.delete('/:id', authenticateToken, photoController.deletePhoto);
 router.post('/', authenticateToken, upload.any(), photoController.create);
+router.post('/:id/comment', authenticateToken, commentController.create);
 router.post(
   '/upload',
   authenticateToken,
@@ -26,7 +29,5 @@ router.post(
   upload.any(),
   photoController.uploadPhoto
 );
-router.post('/:id/comment', authenticateToken, commentController.create);
-router.delete('/:id', authenticateToken, photoController.deletePhoto);
 
 export default router;
