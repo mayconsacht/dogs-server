@@ -31,7 +31,7 @@ export const findPhotos = async (
   page: number,
   total: number
 ) => {
-  let query = db.selectFrom('photo');
+  let query = db.selectFrom('photo').orderBy('id');
   if (criteria.userId && criteria.userId != 0) {
     query = query.where('userId', '=', Number(criteria.userId));
   } else if (criteria.author) {

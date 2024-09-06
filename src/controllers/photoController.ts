@@ -20,8 +20,8 @@ const isNumber = (value: any) => {
 };
 
 export const getPhotos = async (req: Request, res: Response) => {
-  const page = parseInt(req.query.page as string, 6) || 1;
-  const total = parseInt(req.query.total as string, 6) || 6;
+  const page = parseInt(req.query.page as string) || 1;
+  const total = parseInt(req.query.total as string) || 6;
   const user = req.query.user as string;
   let filter = isNumber(user) ? { userId: Number(user) } : { author: user };
   const photos = await photoService.findPhotos(filter, page, total);

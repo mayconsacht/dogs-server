@@ -13,9 +13,14 @@ export const getUser = async (req: Request, res: Response) => {
 
 export const createUser = async (req: Request, res: Response) => {
   const { username, password } = req.body;
-  const userId = await userService.create(
+  const user = await userService.findUserBy({ username });
+  if (user.length > 0) {
+    res.status(400).json({ message: 'User already registered' });
+    return;
+  }
+  const userCreated = await userService.create(
     username,
     await bcrypt.hash(password, 10)
   );
-  res.status(201).json(userId);
+  res.status(201).json(userCreated);
 };

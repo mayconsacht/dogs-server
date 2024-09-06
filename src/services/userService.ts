@@ -8,14 +8,18 @@ export const create = async (username: string, password: string) => {
       username,
       password,
     })
+    .returningAll()
     .executeTakeFirst();
-  return await result.insertId;
+  return await result;
 };
 
 export const findUserBy = async (criteria: Partial<User>) => {
   let query = db.selectFrom('user');
   if (criteria.id) {
     query = query.where('id', '=', criteria.id);
+  }
+  if (criteria.username) {
+    query = query.where('username', '=', criteria.username);
   }
   return await query.selectAll().limit(1).execute();
 };
