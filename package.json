@@ -2,7 +2,6 @@
   "name": "dogs-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=production ts-node --files src/index.ts",
     "dev": "NODE_ENV=development ts-node --files src/index.ts",
@@ -10,23 +9,17 @@
     "migrate": "ts-node src/scripts/migrator.ts"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@vercel/blob": "^0.23.4",
     "@vercel/postgres-kysely": "^0.9.0",
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "kysely": "^0.27.4",
     "multer": "^1.4.5-lts.1",
     "pg": "^8.12.0",
-    "reflect-metadata": "^0.2.2",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1",
-    "typeorm": "^0.3.20"
+    "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -35,11 +28,13 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/multer": "^1.4.12",
     "@types/node": "^22.5.1",
-    "@types/swagger-jsdoc": "^6.0.4",
-    "@types/swagger-ui-express": "^4.1.6",
     "dotenv": "^16.4.5",
     "dotenv-expand": "^11.0.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
-  }
+  },
+  "main": "index.ts",
+  "repository": "git@github.com:mayconsacht/dogs-server.git",
+  "author": "mayconsacht <maycon.sacht@gmail.com>",
+  "license": "MIT"
 }
